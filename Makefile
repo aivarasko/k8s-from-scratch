@@ -14,8 +14,8 @@ rotate_encryption_keys:
 
 .PHONY: crictl_status
 crictl_status:
-	sudo CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" /usr/local/bin/crictl ps
-	sudo CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" /usr/local/bin/crictl images
+	sudo env PATH=${PATH} CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" crictl ps
+	sudo env PATH=${PATH} CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" crictl images
 
 
 .PHONY: run_all

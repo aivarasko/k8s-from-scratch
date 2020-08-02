@@ -5,7 +5,7 @@ IFS=$'\n\t'
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
 export PATH=/opt/local_kube/go/current/bin:$PATH
-GOPATH="${GOPATH:-~/go}"
+GOPATH=${GOPATH:-~/go}
 
 go version
 
@@ -17,7 +17,7 @@ function install_etcd() {
   GIT_LOCATION="github.com/etcd-io/etcd"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   make clean
   go mod vendor
@@ -37,7 +37,7 @@ function install_kubernetes() {
   GIT_LOCATION="github.com/kubernetes/kubernetes"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   make clean
   make
@@ -56,7 +56,7 @@ function install_cfssl() {
   GIT_LOCATION="github.com/cloudflare/cfssl"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   make clean
   make
@@ -75,7 +75,7 @@ function install_runc() {
   GIT_LOCATION="github.com/opencontainers/runc"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   make clean
   make BUILDTAGS='seccomp apparmor'
@@ -95,7 +95,7 @@ function install_containerd() {
   GIT_LOCATION="github.com/containerd/containerd"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   make clean
   make
@@ -114,7 +114,7 @@ function install_cni() {
   GIT_LOCATION="github.com/containernetworking/plugins"
 
   go get "${GIT_LOCATION}" || true
-  pushd "${GOPATH}"/src/"${GIT_LOCATION}"
+  pushd "${GOPATH}/src/${GIT_LOCATION}"
   git checkout "${GIT_VERSION}"
   ./build_linux.sh
   sudo mkdir -p /opt/local_kube/"${APP}"/"${GIT_VERSION}"/bin

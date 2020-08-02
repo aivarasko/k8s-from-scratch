@@ -21,6 +21,7 @@ function install_go() {
 
 # sudo apt-get install -y gcc make pkg-config libseccomp-dev python3-pip
 # sudo apt-get install -y socat conntrack ipset && break
+sudo apt install -y gcc make
 
 # export GOROOT=/usr/local/go
 export GOPATH=$HOME/go

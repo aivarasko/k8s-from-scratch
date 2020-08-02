@@ -25,15 +25,15 @@ function gen_certs() {
 
   cat <<EOF | sudo tee "${NAME}"-csr.json
 {
-  "CN": ""${CN}"",
+  "CN": "${CN}",
   "key": {
     "algo": "rsa",
     "size": 2048
-  }",
+  },
   "names": [
     {
-      "O": ""${O}""
-    }"
+      "O": "${O}"
+    }
   ]
 }
 EOF

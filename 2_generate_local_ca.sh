@@ -14,7 +14,7 @@ function create_ca() {
   "signing": {
     "default": {
       "expiry": "8760h"
-    }
+    },
     "profiles": {
       "kubernetes": {
         "usages": ["signing", "key encipherment", "server auth", "client auth"],
