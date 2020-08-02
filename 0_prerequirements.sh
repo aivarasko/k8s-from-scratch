@@ -6,7 +6,14 @@ IFS=$'\n\t'
 
 source versions.sh
 sudo apt-get update -y
-dpkg -s libbtrfs-dev >/dev/null || sudo apt install libbtrfs-dev # for containerd
+# sudo apt-get install -y gcc make pkg-config libseccomp-dev python3-pip
+# sudo apt-get install -y socat conntrack ipset && break
+# libbtrfs-dev for containerd
+sudo apt install -y gcc make libbtrfs-dev pkg-config
+
+# export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=/opt/local_kube/go/current/bin:$PATH
 
 function install_go() {
   wget https://dl.google.com/go/go"${GO_VERSION}".linux-amd64.tar.gz
@@ -18,14 +25,6 @@ function install_go() {
 }
 
 [ ! -d /opt/local_kube/go/go"${GO_VERSION}"/go ] && install_go
-
-# sudo apt-get install -y gcc make pkg-config libseccomp-dev python3-pip
-# sudo apt-get install -y socat conntrack ipset && break
-sudo apt install -y gcc make
-
-# export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export PATH=/opt/local_kube/go/current/bin:$PATH
 
 go version
 
