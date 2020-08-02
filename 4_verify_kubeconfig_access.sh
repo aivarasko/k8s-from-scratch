@@ -33,7 +33,7 @@ kubectl get pods
 kubectl get nodes
 
 # Node must be discovered dynamically
-CONFIG='server'
+CONFIG=$(hostname)
 KUBECONFIG=/opt/local_kube/kubernetes/etc/"${CONFIG}".kubeconfig
 export KUBECONFIG="${KUBECONFIG}"
 kubectl get pods
