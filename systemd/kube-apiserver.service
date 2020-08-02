@@ -1,0 +1,43 @@
+[Unit]
+Description=Kubernetes API Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/opt/local_kube/kubernetes/current/bin/kube-apiserver \
+  --advertise-address=${DEVICE_IPV4} \
+  --allow-privileged=true \
+  --apiserver-count=3 \
+  --audit-log-maxage=30 \
+  --audit-log-maxbackup=3 \
+  --audit-log-maxsize=100 \
+  --audit-log-path=/var/log/audit.log \
+  --authorization-mode=Node,RBAC \
+  --bind-address=0.0.0.0 \
+  --client-ca-file=/opt/local_kube/kubernetes/pki/ca.crt \
+  --enable-admission-plugins=NamespaceLifecycle,LimitRanger,ServiceAccount,TaintNodesByCondition,Priority,DefaultTolerationSeconds,DefaultStorageClass,StorageObjectInUseProtection,PersistentVolumeClaimResize,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,RuntimeClass,ResourceQuota \
+  --enable-swagger-ui=true \
+  --etcd-cafile=/opt/local_kube/kubernetes/pki/ca.crt \
+  --etcd-certfile=/opt/local_kube/kubernetes/pki/kubernetes.crt \
+  --etcd-keyfile=/opt/local_kube/kubernetes/pki/kubernetes.key \
+  --etcd-servers=https://${DEVICE_IPV4}:2379 \
+  --event-ttl=1h \
+  --encryption-provider-config=/opt/local_kube/kubernetes/etc/encryption-config.yaml \
+  --kubelet-certificate-authority=/opt/local_kube/kubernetes/pki/ca.crt \
+  --kubelet-client-certificate=/opt/local_kube/kubernetes/pki/kubernetes.crt \
+  --kubelet-client-key=/opt/local_kube/kubernetes/pki/kubernetes.key \
+  --kubelet-https=true \
+  --runtime-config=api/all \
+  --service-account-key-file=/opt/local_kube/kubernetes/pki/service-account.crt \
+  --service-cluster-ip-range=10.32.0.0/24 \
+  --service-node-port-range=30000-32767 \
+  --tls-cert-file=/opt/local_kube/kubernetes/pki/kubernetes.crt \
+  --tls-private-key-file=/opt/local_kube/kubernetes/pki/kubernetes.key \
+  --enable-bootstrap-token-auth \
+  --insecure-bind-address="127.0.0.1" \
+  --insecure-port="6444" \
+  --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

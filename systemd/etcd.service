@@ -1,0 +1,28 @@
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos
+
+[Service]
+ExecStart=/opt/local_kube/etcd/current/bin/etcd \
+  --name ${ETCD_NAME} \
+  --cert-file=/opt/local_kube/kubernetes/pki/kubernetes.crt \
+  --key-file=/opt/local_kube/kubernetes/pki/kubernetes.key \
+  --peer-cert-file=/opt/local_kube/kubernetes/pki/kubernetes.crt \
+  --peer-key-file=/opt/local_kube/kubernetes/pki/kubernetes.key \
+  --trusted-ca-file=/opt/local_kube/kubernetes/pki/ca.crt \
+  --peer-trusted-ca-file=/opt/local_kube/kubernetes/pki/ca.crt \
+  --peer-client-cert-auth \
+  --client-cert-auth \
+  --initial-advertise-peer-urls https://${DEVICE_IPV4}:2380 \
+  --listen-peer-urls https://${DEVICE_IPV4}:2380 \
+  --listen-client-urls https://${DEVICE_IPV4}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://${DEVICE_IPV4}:2379 \
+  --initial-cluster-token etcd-cluster-0 \
+  --initial-cluster ${ETCD_NAME}=https://${DEVICE_IPV4}:2380 \
+  --initial-cluster-state new \
+  --data-dir=/opt/local_kube/etcd/var/lib/
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

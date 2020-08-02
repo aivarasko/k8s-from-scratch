@@ -1,0 +1,9 @@
+kind: EncryptionConfig
+apiVersion: v1
+resources:
+  - resources:
+      - secrets
+    providers:
+      - aescbc:
+          keys: ${ENCRYPTION_KEYS_BLOCK}
+      - identity: {}
