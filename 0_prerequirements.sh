@@ -5,10 +5,8 @@ IFS=$'\n\t'
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
 source versions.sh
-sudo apt-get update -y
-# sudo apt-get install -y gcc make pkg-config libseccomp-dev python3-pip
-# sudo apt-get install -y socat conntrack ipset && break
-# libbtrfs-dev for containerd
+sudo apt update -y
+sudo apt install -y socat conntrack ipset
 sudo apt install -y gcc make libbtrfs-dev pkg-config libseccomp-dev
 
 # export GOROOT=/usr/local/go
