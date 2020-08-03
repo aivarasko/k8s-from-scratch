@@ -168,5 +168,10 @@ function install_crictl() {
 }
 [ ! -d /opt/local_kube/crictl/"${CRICTL_VERSION}" ] && install_crictl
 
+for binary in /opt/local_kube/*/current/bin/*; do
+  BIN_NAME=$(basename "${binary}")
+  sudo ln -f -s "${binary}" /usr/local/sbin/"${BIN_NAME}"
+done
+
 exit 0
 # vim: ts=2 sw=2 et
