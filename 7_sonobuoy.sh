@@ -11,7 +11,7 @@ sonobuoy status
 results=$(sonobuoy retrieve -d "${tmp_dir}")
 echo "$results"
 sonobuoy results "$results" >"${tmp_dir}/results-quick.logs"
-cat "${tmp_dir}"/results-quick.logs
+cat "${tmp_dir}/results-quick.logs"
 sonobuoy delete --all --wait
 grep "Status: failed" "${tmp_dir}/results-quick.logs" && exit 1
 
