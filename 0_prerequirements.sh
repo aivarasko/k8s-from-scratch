@@ -14,10 +14,14 @@ export GOPATH=$HOME/go
 export PATH=/opt/local_kube/go/current/bin:$PATH
 
 function install_go() {
-  wget https://dl.google.com/go/go"${GO_VERSION}".linux-amd64.tar.gz
+  tmp_dir=$(mktemp -d -t go-XXXXXXXXXX)
+  wget https://dl.google.com/go/go"${GO_VERSION}".linux-amd64.tar.gz -O "${tmp_dir}/go${GO_VERSION}.linux-amd64.tar.gz"
+  cp sha256sum "${tmp_dir}/"
+  pushd "${tmp_dir}/"
   sha256sum -c sha256sum
   sudo mkdir -p /opt/local_kube/go/go"${GO_VERSION}"
   sudo tar xvfz go"${GO_VERSION}".linux-amd64.tar.gz -C /opt/local_kube/go/go"${GO_VERSION}"
+  popd
   [ -d /opt/local_kube/go/current ] && sudo rm /opt/local_kube/go/current
   sudo ln -s /opt/local_kube/go/go"${GO_VERSION}"/go /opt/local_kube/go/current
 }
