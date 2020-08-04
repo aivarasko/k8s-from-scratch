@@ -23,6 +23,8 @@ kubectl -n kube-system wait --for condition=available deployment -l k8s-app=kube
 # kubectl apply -f https://docs.projectcalico.org/v3.10/manifests/calico.yaml
 # kubectl -n kube-system set env daemonset/calico-node FELIX_IGNORELOOSERPF=true
 
+exit 0
+
 BRIDGE=cnio0
 IPTABLES_RULES=(
   "FORWARD -o ${BRIDGE} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT"
