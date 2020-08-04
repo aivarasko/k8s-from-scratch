@@ -5,13 +5,16 @@ IFS=$'\n\t'
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
 source versions.sh
+
+sudo swapoff -a
+
 sudo apt update -y
 sudo apt install -y socat conntrack ipset
 sudo apt install -y gcc make libbtrfs-dev pkg-config libseccomp-dev
 
 # export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export PATH=/opt/local_kube/go/current/bin:$PATH
+# export GOPATH=$HOME/go
+# export PATH=/opt/local_kube/go/current/bin:$PATH
 
 function install_go() {
   tmp_dir=$(mktemp -d -t go-XXXXXXXXXX)
@@ -28,7 +31,7 @@ function install_go() {
 
 [ ! -d /opt/local_kube/go/go"${GO_VERSION}"/go ] && install_go
 
-go version
+# go version
 
 exit 0
 

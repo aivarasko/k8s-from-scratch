@@ -6,8 +6,6 @@ IFS=$'\n\t'
 
 DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
 
-sudo swapoff -a
-
 sudo systemctl daemon-reload
 for service in 'etcd' 'kube-apiserver' 'kube-controller-manager' 'kube-scheduler'; do
   sudo systemctl restart "${service}"
