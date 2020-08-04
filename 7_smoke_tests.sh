@@ -8,7 +8,7 @@ IFS=$'\n\t'
 # ETCDCTL_API=3 etcdctl get /registry/secrets/default/secret1
 # DEVICE='ens5'
 # DEVICE_IPV4=$(ifconfig "${DEVICE}" | grep 'inet ' | awk '{print $2}')
-# export KUBECONFIG="/opt/local_kube/kubernetes/etc/admin.kubeconfig"
+export KUBECONFIG="/opt/local_kube/kubernetes/etc/admin.kubeconfig"
 
 DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
 
