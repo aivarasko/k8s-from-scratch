@@ -7,19 +7,21 @@ IFS=$'\n\t'
 tmp_dir=$(mktemp -d -t sonobouy-XXXXXXXXXX)
 
 time sonobuoy run -m quick --wait
-results=$(sonobuoy retrieve)
+sonobuoy status
+results=$(sonobuoy retrieve -d "${tmp_dir}")
 echo "$results"
-sonobuoy results "$results" >results-quick.logs
+sonobuoy results "$results" >"${tmp_dir}/results-quick.logs"
 cat "${tmp_dir}"/results-quick.logs
 sonobuoy delete --all --wait
-grep passed "${tmp_dir}"/results-quick.logs
+grep "Status: failed" "${tmp_dir}/results-quick.logs" && exit 1
 
 time sonobuoy run -m certified-conformance --wait
-results=$(sonobuoy retrieve)
-sonobuoy results "$results" >results-certified-conformance.logs
-cat "${tmp_dir}"/results-certified-conformance.logs
+sonobuoy status
+results=$(sonobuoy retrieve -d "${tmp_dir}")
+sonobuoy results "$results" >"${tmp_dir}/results-certified-conformance.logs"
+cat "${tmp_dir}/results-certified-conformance.logs"
 sonobuoy delete --all --wait
-grep passed "${tmp_dir}"/results-certified-conformance.logs
+grep "Status: failed" "${tmp_dir}/results-certified-conformance.logs" && exit 1
 
 echo "Results in dir ${tmp_dir}/"
 
