@@ -4,6 +4,8 @@ IFS=$'\n\t'
 
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
+export KUBECONFIG="/opt/local_kube/kubernetes/etc/admin.kubeconfig"
+
 tmp_dir=$(mktemp -d -t sonobouy-XXXXXXXXXX)
 
 time sonobuoy run -m quick --wait
