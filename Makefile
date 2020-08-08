@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := run_all
 
+multipass_instance_name := my-test-vm
+
 .PHONY: refresh_all_certificates
 refresh_all_certificates:
 	sudo rm -rf /opt/local_kube/kubernetes/pki /opt/local_kube/kubernetes/etc/*.kubeconfig
@@ -17,12 +19,25 @@ crictl_status:
 	sudo env PATH=${PATH} CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" crictl ps
 	sudo env PATH=${PATH} CONTAINER_RUNTIME_ENDPOINT="unix:///var/run/containerd/containerd.sock" crictl images
 
-
 .PHONY: run_all
 run_all:
 	DEBUG=1 ./run_all.sh
 
-
 .PHONY: pre_commit_checks
 pre_commit_checks:
 	pre-commit run --all-files
+
+.PHONY: multipass_test
+multipass_test:
+	multipass launch -c 2 -m 6G -d 20G -n $(multipass_instance_name) --cloud-init cloud-config.yaml 20.04
+
+.PHONY: multipass_clean
+multipass_clean:
+	multipass delete $(multipass_instance_name)
+	multipass purge
+
+.PHONY: multipass_rerun
+multipass_rerun:
+	make multipass_clear || true
+	make multipass_test || true
+	multipass exec $(multipass_instance_name) -- tail -f /var/log/cloud-init-output.log
