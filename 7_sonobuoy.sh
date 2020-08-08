@@ -25,15 +25,17 @@ cat "${tmp_dir}/results-certified-conformance.logs"
 sonobuoy delete --all --wait
 grep "Status: failed" "${tmp_dir}/results-certified-conformance.logs" && exit 1
 
-echo "Results in dir ${tmp_dir}/"
+time sonobuoy run \
+  --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-plugin.yaml \
+  --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-master-plugin.yaml \
+  --wait
+sonobuoy status
+results=$(sonobuoy retrieve -d "${tmp_dir}")
+sonobuoy results "$results" >"${tmp_dir}/results-cis.logs"
+cat "${tmp_dir}/results-cis.logs"
+sonobuoy delete --all --wait
+grep "Status: failed" "${tmp_dir}/results-cis.logs" && exit 1
 
-# time sonobuoy run \
-#   --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-plugin.yaml \
-#   --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-master-plugin.yaml \
-#   --wait
-# results=$(sonobuoy retrieve)
-# sonobuoy results $results > results-cis.logs
-# cat results-cis.logs
-# sonobuoy delete --all --wait
+echo "PASSED"
 
 # vim: ts=2 sw=2 et
