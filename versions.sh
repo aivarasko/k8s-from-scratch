@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export GO_VERSION='1.14.7'
-export CFSSL_GIT_VERSION='1.4.1'
+export CFSSL_GIT_VERSION='v1.4.1'
 export CNI_GIT_VERSION='v0.8.2'
 export CONTAINERD_GIT_VERSION='v1.3.7'
 export ETCD_GIT_VERSION='v3.4.10'
