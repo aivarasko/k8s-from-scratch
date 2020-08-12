@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 ExecStartPre=-/sbin/modprobe overlay
-ExecStart=/opt/local_kube/containerd/current/bin/containerd
+ExecStart=${K8SFS_TARGET_LOCATION}/containerd/${CONTAINERD_GIT_VERSION}/bin/containerd --config ${K8SFS_KUBECONFIG_LOCATION}/containerd.toml
 KillMode=process
 Delegate=yes
 LimitNOFILE=1048576

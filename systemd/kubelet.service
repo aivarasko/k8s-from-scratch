@@ -5,15 +5,15 @@ Documentation=https://github.com/kubernetes/kubernetes
 # Requires=containerd.service
 
 [Service]
-ExecStart=/opt/local_kube/kubernetes/current/bin/kubelet \
-  --config=/opt/local_kube/kubernetes/etc/kubelet-config.yaml \
+ExecStart=${K8SFS_TARGET_LOCATION}/kubernetes/${KUBERNETES_GIT_VERSION}/bin/kubelet \
+  --config=${K8SFS_KUBECONFIG_LOCATION}/kubelet-config.yaml \
   --container-runtime=remote \
   --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
   --image-pull-progress-deadline=2m \
-  --kubeconfig=/opt/local_kube/kubernetes/etc/${WORKER_HOSTNAME}.kubeconfig \
+  --kubeconfig=${K8SFS_KUBECONFIG_LOCATION}/${WORKER_HOSTNAME}.kubeconfig \
   --network-plugin=cni \
   --register-node=true \
-  --pod-manifest-path=/opt/local_kube/kubernetes/manifests/ \
+  --pod-manifest-path=${K8SFS_MANIFESTS_LOCATION} \
   --node-ip=${DEVICE_IPV4} \
   --v=2
 Restart=on-failure

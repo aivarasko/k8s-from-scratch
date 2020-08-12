@@ -4,37 +4,43 @@ IFS=$'\n\t'
 
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
-export KUBECONFIG="/opt/local_kube/kubernetes/etc/admin.kubeconfig"
-
 tmp_dir=$(mktemp -d -t sonobouy-XXXXXXXXXX)
 
 time sonobuoy run -m quick --wait
+output="${tmp_dir}/results-quick.logs"
+
 sonobuoy status
 results=$(sonobuoy retrieve -d "${tmp_dir}")
 echo "$results"
-sonobuoy results "$results" >"${tmp_dir}/results-quick.logs"
-cat "${tmp_dir}/results-quick.logs"
+sonobuoy results "$results" >"${output}"
+cat "${output}"
 sonobuoy delete --all --wait
-grep "Status: failed" "${tmp_dir}/results-quick.logs" && exit 1
+grep "Status: failed" "${output}" && exit 1
 
 time sonobuoy run -m certified-conformance --wait
+output="${tmp_dir}/results-certified-conformance.logs"
+
 sonobuoy status
 results=$(sonobuoy retrieve -d "${tmp_dir}")
-sonobuoy results "$results" >"${tmp_dir}/results-certified-conformance.logs"
-cat "${tmp_dir}/results-certified-conformance.logs"
+echo "$results"
+sonobuoy results "$results" >"${output}"
+cat "${output}"
 sonobuoy delete --all --wait
-grep "Status: failed" "${tmp_dir}/results-certified-conformance.logs" && exit 1
+grep "Status: failed" "${output}" && exit 1
 
 time sonobuoy run \
-  --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-plugin.yaml \
-  --plugin https://raw.githubusercontent.com/vmware-tanzsonobuoy-plugins/cis-benchmarks/cis-benchmarks/kube-bench-master-plugin.yaml \
+  --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-plugin.yaml \
+  --plugin https://raw.githubusercontent.com/vmware-tanzu/sonobuoy-plugins/master/cis-benchmarks/kube-bench-master-plugin.yaml \
   --wait
+output="${tmp_dir}/results-cis.logs"
+
 sonobuoy status
 results=$(sonobuoy retrieve -d "${tmp_dir}")
-sonobuoy results "$results" >"${tmp_dir}/results-cis.logs"
-cat "${tmp_dir}/results-cis.logs"
+echo "$results"
+sonobuoy results "$results" >"${output}"
+cat "${output}"
 sonobuoy delete --all --wait
-grep "Status: failed" "${tmp_dir}/results-cis.logs" && exit 1
+grep "Status: failed" "${output}" && exit 1
 
 echo "PASSED"
 

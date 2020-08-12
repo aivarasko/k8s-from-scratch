@@ -8,21 +8,20 @@ IFS=$'\n\t'
 # ETCDCTL_API=3 etcdctl get /registry/secrets/default/secret1
 # DEVICE='ens5'
 # DEVICE_IPV4=$(ifconfig "${DEVICE}" | grep 'inet ' | awk '{print $2}')
-export KUBECONFIG="/opt/local_kube/kubernetes/etc/admin.kubeconfig"
 
 DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
 
 kubectl delete namespace smoke || true
 
 # Test etcd status
-ETCDCTL_API=3 etcdctl member list --endpoints=https://"${DEVICE_IPV4}":2379 --cacert=/opt/local_kube/kubernetes/pki/ca.crt --cert=/opt/local_kube/kubernetes/pki/kubernetes.crt --key=/opt/local_kube/kubernetes/pki/kubernetes.key | grep "started"
+ETCDCTL_API=3 etcdctl member list --endpoints=https://"${DEVICE_IPV4}":2379 --cacert="${K8SFS_CERT_LOCATION}/ca.crt" --cert="${K8SFS_CERT_LOCATION}/kubernetes.crt" --key="${K8SFS_CERT_LOCATION}/kubernetes.key" | grep "started"
 
 # Test secrets encryption
 kubectl create namespace smoke
 kubectl -n smoke create secret generic smoke-secret --from-literal="mysecret=mydata"
-ETCDCTL_API=3 etcdctl get --endpoints=https://"${DEVICE_IPV4}":2379 --cacert=/opt/local_kube/kubernetes/pki/ca.crt --cert=/opt/local_kube/kubernetes/pki/kubernetes.crt --key=/opt/local_kube/kubernetes/pki/kubernetes.key /registry/secrets/smoke/smoke-secret | grep "aescbc"
+ETCDCTL_API=3 etcdctl get --endpoints="https://${DEVICE_IPV4}:2379" --cacert="${K8SFS_CERT_LOCATION}/ca.crt" --cert="${K8SFS_CERT_LOCATION}/kubernetes.crt" --key="${K8SFS_CERT_LOCATION}/kubernetes.key" /registry/secrets/smoke/smoke-secret | grep "aescbc"
 
-ETCDCTL_API=3 etcdctl get --endpoints=https://"${DEVICE_IPV4}":2379 --cacert=/opt/local_kube/kubernetes/pki/ca.crt --cert=/opt/local_kube/kubernetes/pki/kubernetes.crt --key=/opt/local_kube/kubernetes/pki/kubernetes.key /registry/secrets/smoke/smoke-secret
+ETCDCTL_API=3 etcdctl get --endpoints="https://${DEVICE_IPV4}:2379" --cacert="${K8SFS_CERT_LOCATION}/ca.crt" --cert="${K8SFS_CERT_LOCATION}/kubernetes.crt" --key="${K8SFS_CERT_LOCATION}/kubernetes.key" /registry/secrets/smoke/smoke-secret
 
 # Test Deployment, Expose
 kubectl -n smoke create deployment nginx --image=nginx

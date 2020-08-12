@@ -1,6 +1,6 @@
 apiVersion: kubescheduler.config.k8s.io/v1alpha1
 kind: KubeSchedulerConfiguration
 clientConnection:
-  kubeconfig: "/opt/local_kube/kubernetes/etc/kube-scheduler.kubeconfig"
+  kubeconfig: "${K8SFS_KUBECONFIG_LOCATION}/kube-scheduler.kubeconfig"
 leaderElection:
   leaderElect: true

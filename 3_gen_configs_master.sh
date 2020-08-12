@@ -6,11 +6,8 @@ IFS=$'\n\t'
 
 DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export DEVICE_IPV4="${DEVICE_IPV4}"
-KUBECONFIG_LOCATION="/opt/local_kube/kubernetes/etc"
-mkdir -p "${KUBECONFIG_LOCATION}"
 
-KEYS="${KUBECONFIG_LOCATION}/encryption.keys"
-mkdir -p "${KUBECONFIG_LOCATION}"
+KEYS="${K8SFS_KUBECONFIG_LOCATION}/encryption.keys"
 
 if [ ! -f "${KEYS}" ] || [[ -n "${ROTATE_KEYS:-}" ]]; then
   head -c 32 /dev/urandom | base64 | sudo tee -a "${KEYS}"
@@ -32,7 +29,7 @@ export ENCRYPTION_KEYS_BLOCK="${ENCRYPTION_KEYS_BLOCK}"
 
 pushd etc/
 for config in "encryption-config.yaml" "kube-scheduler.yaml"; do
-  envsubst <"${config}" | sudo -E tee "${KUBECONFIG_LOCATION}"/"${config}"
+  envsubst <"${config}" | sudo -E tee "${K8SFS_KUBECONFIG_LOCATION}/${config}"
 done
 popd
 

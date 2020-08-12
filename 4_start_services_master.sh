@@ -15,7 +15,7 @@ done
 #   systemctl status "${service}"
 # done
 
-if timeout 20 sh -c "while sleep 3 ; do echo 'waiting for master'; curl --silent --show-error --fail -o /dev/null --cacert /opt/local_kube/kubernetes/pki/ca.crt https://${DEVICE_IPV4}:6443/version && break; done"; then
+if timeout 20 sh -c "while sleep 3 ; do echo 'waiting for master'; curl --silent --show-error --fail -o /dev/null --cacert ${K8SFS_CERT_LOCATION}/ca.crt https://${DEVICE_IPV4}:6443/version && break; done"; then
   echo "service is up"
 else
   exit 1

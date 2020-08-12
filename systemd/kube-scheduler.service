@@ -3,9 +3,9 @@ Description=Kubernetes Scheduler
 Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
-ExecStart=/opt/local_kube/kubernetes/current/bin/kube-scheduler \
-  --authentication-kubeconfig=/opt/local_kube/kubernetes/etc/kube-scheduler.kubeconfig \
-  --config=/opt/local_kube/kubernetes/etc/kube-scheduler.yaml \
+ExecStart=${K8SFS_TARGET_LOCATION}/kubernetes/${KUBERNETES_GIT_VERSION}/bin/kube-scheduler \
+  --authentication-kubeconfig=${K8SFS_KUBECONFIG_LOCATION}/kube-scheduler.kubeconfig \
+  --config=${K8SFS_KUBECONFIG_LOCATION}/kube-scheduler.yaml \
   --v=2
 Restart=on-failure
 RestartSec=5

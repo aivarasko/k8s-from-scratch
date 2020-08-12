@@ -4,6 +4,8 @@ IFS=$'\n\t'
 
 [[ -z "${DEBUG:-}" ]] || set -o xtrace
 
+source config.sh
+
 ./0_prerequirements.sh
 ./1_make_binaries.sh
 ./2_generate_local_ca.sh

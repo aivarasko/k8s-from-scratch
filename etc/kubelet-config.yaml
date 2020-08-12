@@ -6,7 +6,7 @@ authentication:
   webhook:
     enabled: true
   x509:
-    clientCAFile: "/opt/local_kube/kubernetes/pki/ca.crt"
+    clientCAFile: "${K8SFS_CERT_LOCATION}/ca.crt"
 authorization:
   mode: Webhook
 clusterDomain: "cluster.local"
@@ -15,5 +15,5 @@ clusterDNS:
 podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
-tlsCertFile: "/opt/local_kube/kubernetes/pki/${WORKER_HOSTNAME}.crt"
-tlsPrivateKeyFile: "/opt/local_kube/kubernetes/pki/${WORKER_HOSTNAME}.key"
+tlsCertFile: "${K8SFS_CERT_LOCATION}/${WORKER_HOSTNAME}.crt"
+tlsPrivateKeyFile: "${K8SFS_CERT_LOCATION}/${WORKER_HOSTNAME}.key"

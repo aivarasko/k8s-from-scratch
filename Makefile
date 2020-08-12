@@ -1,10 +1,10 @@
 .DEFAULT_GOAL := run_all
 
-multipass_instance_name := my-test-vm
+test_version?=$(git branch)
 
 .PHONY: refresh_all_certificates
 refresh_all_certificates:
-	sudo rm -rf /opt/local_kube/kubernetes/pki /opt/local_kube/kubernetes/etc/*.kubeconfig
+	sudo rm -rf /opt/local_kube/kubernetes/pki /opt/k8sfs/kubernetes/etc/*.kubeconfig
 	./run_all.sh
 
 .PHONY: rotate_encryption_keys
@@ -29,15 +29,15 @@ pre_commit_checks:
 
 .PHONY: multipass_test
 multipass_test:
-	multipass launch -c 2 -m 6G -d 20G -n $(multipass_instance_name) --cloud-init cloud-config.yaml 20.04
+	multipass launch -c 2 -m 6G -d 20G -n $(test_version) --cloud-init cloud-config.yaml 20.04
 
 .PHONY: multipass_clean
 multipass_clean:
-	multipass delete $(multipass_instance_name)
+	multipass delete $(test_version)
 	multipass purge
 
 .PHONY: multipass_rerun
 multipass_rerun:
 	make multipass_clear || true
 	make multipass_test || true
-	multipass exec $(multipass_instance_name) -- tail -f /var/log/cloud-init-output.log
+	multipass exec $(test_version) -- tail -f /var/log/cloud-init-output.log

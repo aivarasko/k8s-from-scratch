@@ -2,12 +2,8 @@
 set -euox pipefail
 IFS=$'\n\t'
 
-CERT_LOCATION="/opt/local_kube/kubernetes/pki"
-PATH=/opt/local_kube/cfssl/current/bin:/opt/local_kube/kubernetes/current/bin:$PATH
-
 function create_ca() {
-  sudo mkdir -p "${CERT_LOCATION}"
-  pushd "${CERT_LOCATION}"
+  pushd "${K8SFS_CERT_LOCATION}"
 
   cat <<EOF | sudo tee ca-config.json
 {
@@ -42,7 +38,7 @@ EOF
   popd
 }
 
-if [ ! -f "${CERT_LOCATION}"/ca.crt ]; then
+if [ ! -f "${K8SFS_CERT_LOCATION}/ca.crt" ]; then
   create_ca
 fi
 
