@@ -12,8 +12,8 @@ function install_go() {
   cp sha256sum "${tmp_dir}/"
   pushd "${tmp_dir}/"
   sha256sum -c sha256sum
-  sudo mkdir -p "${K8SFS_CACHE_LOCATION}/go/go${GO_VERSION}"
-  sudo tar xvfz go"${GO_VERSION}".linux-amd64.tar.gz -C "${K8SFS_CACHE_LOCATION}/go/go${GO_VERSION}"
+  sudo mkdir -p "${K8SFS_CACHE_LOCATION}/${APP}/${GO_VERSION}"
+  sudo tar xvfz go"${GO_VERSION}".linux-amd64.tar.gz -C "${K8SFS_CACHE_LOCATION}/${APP}/${GO_VERSION}"
   popd
   # [ -d "${K8SFS_CACHE_LOCATION}/go/current" ] && sudo rm "${K8SFS_CACHE_LOCATION}/go/current"
   # sudo ln -s "${K8SFS_CACHE_LOCATION}/go/go${GO_VERSION}/go" "${K8SFS_CACHE_LOCATION}/go/current"
