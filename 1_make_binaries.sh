@@ -7,6 +7,8 @@ IFS=$'\n\t'
 source config.sh
 
 function install_go() {
+  APP='go'
+
   tmp_dir=$(mktemp -d -t go-XXXXXXXXXX)
   wget https://dl.google.com/go/go"${GO_VERSION}".linux-amd64.tar.gz -O "${tmp_dir}/go${GO_VERSION}.linux-amd64.tar.gz"
   cp sha256sum "${tmp_dir}/"
@@ -18,8 +20,10 @@ function install_go() {
   # [ -d "${K8SFS_CACHE_LOCATION}/go/current" ] && sudo rm "${K8SFS_CACHE_LOCATION}/go/current"
   # sudo ln -s "${K8SFS_CACHE_LOCATION}/go/go${GO_VERSION}/go" "${K8SFS_CACHE_LOCATION}/go/current"
 }
+[ ! -d "${K8SFS_CACHE_LOCATION}/go/${GO_VERSION}" ] && install_go
 
-[ ! -d "${K8SFS_CACHE_LOCATION}/go/go${GO_VERSION}/go" ] && install_go
+# Go does not exists yet in the target, use cached version
+export PATH="${K8SFS_CACHE_LOCATION}/go/${GO_VERSION}/go/bin:$PATH"
 
 function install_etcd() {
   APP='etcd'
@@ -178,12 +182,7 @@ function install_crictl() {
 }
 [ ! -d "${K8SFS_CACHE_LOCATION}/crictl/${CRICTL_VERSION}" ] && install_crictl
 
-for binary in "${K8SFS_CACHE_LOCATION}"/*/current/bin/*; do
-  BIN_NAME=$(basename "${binary}")
-  sudo ln -f -s "${binary}" /usr/local/sbin/"${BIN_NAME}"
-done
-
-sudo cp -r "${K8SFS_CACHE_LOCATION}"/* "${K8SFS_TARGET_LOCATION}/"
+sudo rsync -r "${K8SFS_CACHE_LOCATION}"/* "${K8SFS_TARGET_LOCATION}/"
 
 exit 0
 # vim: ts=2 sw=2 et
