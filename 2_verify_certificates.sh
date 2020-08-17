@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
 for cert in "${K8SFS_CERT_LOCATION}"/*.crt; do
   openssl verify -verbose -CAfile "${K8SFS_CERT_LOCATION}/ca.crt" "${cert}"

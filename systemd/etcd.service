@@ -13,12 +13,12 @@ ExecStart=${K8SFS_TARGET_LOCATION}/etcd/${ETCD_GIT_VERSION}/bin/etcd \
   --peer-trusted-ca-file=${K8SFS_CERT_LOCATION}/ca.crt \
   --peer-client-cert-auth \
   --client-cert-auth \
-  --initial-advertise-peer-urls https://${DEVICE_IPV4}:2380 \
-  --listen-peer-urls https://${DEVICE_IPV4}:2380 \
-  --listen-client-urls https://${DEVICE_IPV4}:2379,https://127.0.0.1:2379 \
-  --advertise-client-urls https://${DEVICE_IPV4}:2379 \
+  --initial-advertise-peer-urls https://${MASTER_IP}:2380 \
+  --listen-peer-urls https://${MASTER_IP}:2380 \
+  --listen-client-urls https://${MASTER_IP}:2379,https://127.0.0.1:2379 \
+  --advertise-client-urls https://${MASTER_IP}:2379 \
   --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster ${ETCD_NAME}=https://${DEVICE_IPV4}:2380 \
+  --initial-cluster ${ETCD_NAME}=https://${MASTER_IP}:2380 \
   --initial-cluster-state new \
   --data-dir=${K8SFS_TARGET_LOCATION}/etcd/var/lib/
 Restart=on-failure

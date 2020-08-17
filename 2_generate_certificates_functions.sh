@@ -2,10 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
-
-DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
-export DEVICE_IPV4="${DEVICE_IPV4}"
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
 function gen_certs() {
   [ -f "${K8SFS_CERT_LOCATION}"/"${1}".key ] && return 0

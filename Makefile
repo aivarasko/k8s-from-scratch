@@ -29,15 +29,26 @@ pre_commit_checks:
 
 .PHONY: multipass_test
 multipass_test:
-	multipass launch -c 2 -m 6G -d 20G -n $(test_version) --cloud-init cloud-config.yaml 20.04
+	multipass launch -c 2 -m 6G -d 20G -n master --cloud-init cloud-config-master.yaml 20.04
+	multipass launch -c 2 -m 6G -d 20G -n worker --cloud-init cloud-config-worker.yaml 20.04
 
 .PHONY: multipass_clean
 multipass_clean:
-	multipass delete $(test_version)
+	rm -rf ~/.cache/multipass/
+	multipass delete master || true
+	multipass delete node0 || true
+	multipass delete node1 || true
+	multipass delete node2 || true
 	multipass purge
 
 .PHONY: multipass_rerun
 multipass_rerun:
 	make multipass_clear || true
 	make multipass_test || true
-	multipass exec $(test_version) -- tail -f /var/log/cloud-init-output.log
+	multipass exec master -- tail -f /var/log/cloud-init-output.log
+
+
+.PHONY: pre_commit_setup
+pre_commit_setup:
+	  curl https://pre-commit.com/install-local.py | python3 -
+	  GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt

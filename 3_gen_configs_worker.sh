@@ -2,16 +2,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
-NODE_NO=0
-
-WORKER_HOSTNAME=$(hostname)
-DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
-POD_CIDR="10.222.${NODE_NO}.0/24"
-
-export WORKER_HOSTNAME="${WORKER_HOSTNAME}"
-export DEVICE_IPV4="${DEVICE_IPV4}"
+POD_CIDR="10.222.${WORKER_NO}.0/24"
 export POD_CIDR="${POD_CIDR}"
 
 pushd etc/

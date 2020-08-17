@@ -2,10 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
-
-DEVICE_IPV4=$(ip route get 1 | awk '{print $(NF-2);exit}')
-export DEVICE_IPV4="${DEVICE_IPV4}"
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
 KEYS="${K8SFS_KUBECONFIG_LOCATION}/encryption.keys"
 
@@ -28,12 +25,12 @@ ENCRYPTION_KEYS_BLOCK="${ENCRYPTION_KEYS_BLOCK}"
 export ENCRYPTION_KEYS_BLOCK="${ENCRYPTION_KEYS_BLOCK}"
 
 pushd etc/
-for config in "encryption-config.yaml" "kube-scheduler.yaml"; do
+for config in "encryption-config.yaml" "kube-scheduler.yaml" "kube-proxy-config.yaml"; do
   envsubst <"${config}" | sudo -E tee "${K8SFS_KUBECONFIG_LOCATION}/${config}"
 done
 popd
 
-for service in 'etcd' 'kube-apiserver' 'kube-controller-manager' 'kube-scheduler'; do
+for service in 'etcd' 'kube-apiserver' 'kube-controller-manager' 'kube-scheduler' 'kube-proxy'; do
   envsubst <systemd/"${service}".service | sudo -E tee /etc/systemd/system/"${service}".service
 done
 

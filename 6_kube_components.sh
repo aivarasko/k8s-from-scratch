@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
 sudo chown "$(id -un)" "${K8SFS_KUBECONFIG_LOCATION}/admin.kubeconfig"
 

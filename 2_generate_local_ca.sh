@@ -2,6 +2,8 @@
 set -euox pipefail
 IFS=$'\n\t'
 
+sudo apt install -y golang-cfssl
+
 function create_ca() {
   pushd "${K8SFS_CERT_LOCATION}"
 
@@ -37,6 +39,8 @@ EOF
 
   popd
 }
+
+sudo mkdir -p "${K8SFS_CERT_LOCATION}"
 
 if [ ! -f "${K8SFS_CERT_LOCATION}/ca.crt" ]; then
   create_ca

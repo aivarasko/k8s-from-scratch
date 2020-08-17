@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-[[ -z "${DEBUG:-}" ]] || set -o xtrace
+[[ -z "${TRACE:-}" ]] || set -o xtrace
 
 sudo systemctl daemon-reload
 for service in 'containerd' 'kubelet' 'kube-proxy'; do

@@ -4,7 +4,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 
 [Service]
 ExecStart=${K8SFS_TARGET_LOCATION}/kubernetes/${KUBERNETES_GIT_VERSION}/bin/kube-apiserver \
-  --advertise-address=${DEVICE_IPV4} \
+  --advertise-address=${MASTER_IP} \
   --allow-privileged=true \
   --apiserver-count=3 \
   --audit-log-maxage=30 \
@@ -19,7 +19,7 @@ ExecStart=${K8SFS_TARGET_LOCATION}/kubernetes/${KUBERNETES_GIT_VERSION}/bin/kube
   --etcd-cafile=${K8SFS_CERT_LOCATION}/ca.crt \
   --etcd-certfile=${K8SFS_CERT_LOCATION}/kubernetes.crt \
   --etcd-keyfile=${K8SFS_CERT_LOCATION}/kubernetes.key \
-  --etcd-servers=https://${DEVICE_IPV4}:2379 \
+  --etcd-servers=https://${MASTER_IP}:2379 \
   --event-ttl=1h \
   --encryption-provider-config=${K8SFS_KUBECONFIG_LOCATION}/encryption-config.yaml \
   --kubelet-certificate-authority=${K8SFS_CERT_LOCATION}/ca.crt \
@@ -32,9 +32,17 @@ ExecStart=${K8SFS_TARGET_LOCATION}/kubernetes/${KUBERNETES_GIT_VERSION}/bin/kube
   --service-node-port-range=30000-32767 \
   --tls-cert-file=${K8SFS_CERT_LOCATION}/kubernetes.crt \
   --tls-private-key-file=${K8SFS_CERT_LOCATION}/kubernetes.key \
-  --enable-bootstrap-token-auth \
+  --enable-aggregator-routing=true \
+  --enable-bootstrap-token-auth=true \
   --insecure-bind-address="127.0.0.1" \
   --insecure-port="6444" \
+  --requestheader-client-ca-file=${K8SFS_CERT_LOCATION}/ca.crt \
+  --requestheader-allowed-names=aggregator \
+  --requestheader-extra-headers-prefix=X-Remote-Extra- \
+  --requestheader-group-headers=X-Remote-Group \
+  --requestheader-username-headers=X-Remote-User \
+  --proxy-client-cert-file=${K8SFS_CERT_LOCATION}/proxy-client.crt \
+  --proxy-client-key-file=${K8SFS_CERT_LOCATION}/proxy-client.key \
   --v=2
 Restart=on-failure
 RestartSec=5
