@@ -98,6 +98,9 @@ function install_runc() {
   # sudo cp runc /usr/local/sbin/
   popd
 
+  # TODO: do not overwrite runc, better update containerd config to use correct runc location
+  ln -fs /opt/k8sfs/runc/v1.0.0-rc92/bin/runc /usr/local/sbin/runc
+
   # [ -d ${K8SFS_CACHE_LOCATION}/"${APP}"/current ] && sudo rm ${K8SFS_CACHE_LOCATION}/"${APP}"/current
   # sudo ln -s ${K8SFS_CACHE_LOCATION}/"${APP}"/"${GIT_VERSION}" ${K8SFS_CACHE_LOCATION}/"${APP}"/current
 }
