@@ -60,4 +60,4 @@ multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TR
 multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TRACE=1 ./7_one_by_one.sh DNS should provide DNS"
 multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TRACE=1 ./7_one_by_one.sh should mutate configmap"
 multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TRACE=1 ./7_one_by_one.sh Aggregator Should be able to support"
-multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TRACE=1 ./7_sonobuoy.sh" || true
+multipass exec master -- bash -c "cd /k8s-from-scratch && source config.sh && TRACE=1 ./7_sonobuoy.sh"
